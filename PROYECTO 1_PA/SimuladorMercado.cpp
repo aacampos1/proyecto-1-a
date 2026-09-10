@@ -119,7 +119,7 @@ void SimuladorMercado::crearClubes() {
   clubes[2].agregarJugador(j15);
   todosLosJugadores[i++] = j15;
 
-  // Club de Bayern Múnich
+  // Club de Bayern Munich
   clubes[3] = Club(4, "Bayern Múnich", 0.0);
   Jugador *j21 = new Portero(idGlobal++, "Manuel Neuer", 0.0, &clubes[4]);
   clubes[3].agregarJugador(j21);
@@ -178,6 +178,8 @@ void SimuladorMercado::crearClubes() {
   todosLosJugadores[i++] = j30;
 }
 
+  totalJugadores = i; 
+
 void SimuladorMercado::asignarPresupuestos() {
   for (int i = 0; i < 6; i++) {
     int presupuesto = 100 + rand() % 101; // 100 a 200
@@ -201,6 +203,12 @@ void SimuladorMercado::asignarValoresMercado() {
     j->setValorMercado(valor);
   }
 }
+
+void SimuladorMercado::guardarEstadoInicial() {
+  presupuestoInicialUsuario = clubes[indxClubUsuario].getPresupuesto();
+  plantillaInicialUsuario = clubes[indxClubUsuario].getJugadores();
+}
+
 void SimuladorMercado::agregarOferta(Oferta o) {
   if (cantidadOfertas == capacidadOfertas) {
     int nuevaCapacidad;
@@ -240,3 +248,414 @@ void SimuladorMercado::agregarTransferencia(Transferencia t) {
   historialTransferencias[cantidadHistorial] = t;
   cantidadHistorial++;
 }
+
+//helper interno
+iint SimuladorMercado::indiceDelClub(Club *c) const {
+  for (int i = 0; i < 6; i++) {
+    if (&clubes[i] == c) {
+      return i;
+    }
+  }
+  return -1;
+}
+ 
+bool SimuladorMercado::clubSeQuedaSinPosicion(Club &c,
+  Jugador *jugadorQueSaldria) const {
+  int mismaPosicion = 0;
+  vector<Jugador *> &jugadores = c.getJugadores();
+  for (size_t k = 0; k < jugadores.size(); k++) {
+    Jugador *j = jugadores[k];
+    if (j == jugadorQueSaldria) {
+      continue;
+    }
+    bool coincide = false;
+    if (dynamic_cast<Portero *>(jugadorQueSaldria) && dynamic_cast<Portero *>(j)) {
+      coincide = true;
+    } else if (dynamic_cast<Defensa *>(jugadorQueSaldria) && dynamic_cast<Defensa *>(j)) {
+      coincide = true;
+    } else if (dynamic_cast<Mediocampista *>(jugadorQueSaldria) && dynamic_cast<Mediocampista *>(j)) {
+      coincide = true;
+    } else if (dynamic_cast<Delantero *>(jugadorQueSaldria) && dynamic_cast<Delantero *>(j)) {
+      coincide = true;
+    }
+    if (coincide) {
+      mismaPosicion++;
+    }
+  }
+  return mismaPosicion == 0;
+}
+
+void SimuladorMercado::ejecutarTransferencia(Jugador*j, Club &origen, Club &destino, double monto){
+
+  //usando puntero para no crear copia del jugador
+  vector <Jugador*> &JugadorOrigen = origen.getJugadores();
+  int idx =-1;
+  for (side_t k=0; k<jugadoresOrigen.side(); k++){
+    if (jugadoresOrigen[k] ==j){
+      idx= (inx)k;
+      break;
+    }
+  }
+  if (idx==-1)[
+   return; 
+  ]
+  origen.quitarJugador(idx);
+  destino.agregarJugador(j);
+
+  origen.setPresupuesto(origen.getPresupuesto()+monto);
+  destino.setPresupuesto(destino.getPresupuesto()-monto)
+
+
+  Transferencia t;
+  t.dia = diaActual;
+  t.jugador = j;
+  t.montoPagado =  monto;
+  t.Origen = &origen;
+  t.destino = &destino
+  agregarTransferencia(t);
+
+  if (indiceDelClub(&destino)== indxClubUsuario){
+    totalGastado += monto;
+    jugadoresComprados++;
+  }
+  if (indiceDelClub(&origen)==indxClubUsuario){
+    totalGastado += monto;
+    jugadoresVendidos++;
+
+  }
+}
+
+
+//menu
+void SimuladorMercado::verMiClub(){
+  Club &miClub = clubes[indxClubUsuario];
+  cout<<"\n Club:"<<miClub.getNombre()<<endl;
+  cout<<"\n Presupuesto:"<<miClub.getPresupuesto()<<"millones"<<endl;
+  cout << "Plantilla:"<<end;
+
+  vector<Jugador *> jugadores;> = miClub.getJugadores();
+  for (side_t k=0; k<jugadores.side(); k++)[
+    cout<<"--->"<<jugadores[k]->monstrarDescripcion()<<endl;
+  ]
+
+}
+
+void SimuladorMercado::explorarJugadores(){
+  cout<<"\n1. Ver todos"<<endl;
+  cout<<"2. Filtrar por posicion"<<endl;
+  cout<<"3. Buscar por identificador"<<endl;
+  cout<<"2SELECCIONA UNA OPCION"<<endl;
+  int opcion;
+  cin>>opcion;
+
+  bool encontrado = false;
+
+  if (opcion==2){
+    cout<<"1. Portero  2. Defensa  3. Mediocampista  4.Delantero"<<endl;
+    cout<<"posicion"<<endl;
+    int pos;
+    for (int i = 0: i<6; i++){
+      if (i == indxClubUsuario){
+      continue;
+      }
+    vector<Jugador *> jugadores; = clubles[i].getJugadores();
+    for (sides_t k=0; k<jugadores.side() k++;){
+
+   Jugador *j = jugadores[k];
+        bool coincide =
+            (pos == 1 && dynamic_cast<Portero *>(j)) ||
+            (pos == 2 && dynamic_cast<Defensa *>(j)) ||
+            (pos == 3 && dynamic_cast<Mediocampista *>(j)) ||
+            (pos == 4 && dynamic_cast<Delantero *>(j));
+        if (coincide) {
+          cout << "  - " << j->mostrarDescripcion()
+               << "  (Club: " << clubes[i].getNombre() << ")" << endl;
+          encontrado = true;
+        }
+      }
+    }
+  } else if (opcion == 3) {
+    cout << "Identificador del jugador: ";
+    int id;
+    cin >> id;
+    for (int i = 0; i < 6; i++) {
+      if (i == indxClubUsuario) {
+        continue;
+      }
+      vector<Jugador *> jugadores;=clubes[i].getJugadores();
+      for (side_t k=0; k < jugadores.side(); k++){
+         if (jugadores[k]->getId() == id) {
+          cout << "  - " << jugadores[k]->mostrarDescripcion()
+               << "  (Club: " << clubes[i].getNombre() << ")" << endl;
+          encontrado = true;
+        }
+      }
+    }
+  } else {
+    for (int i = 0; i < 6; i++) {
+      if (i == indxClubUsuario) {
+        continue;
+      }
+      cout << "\nClub: " << clubes[i].getNombre() << endl;
+      vector<Jugador *> &jugadores = clubes[i].getJugadores();
+      for (size_t k = 0; k < jugadores.size(); k++) {
+        cout << "  - " << jugadores[k]->mostrarDescripcion() << endl;
+        encontrado = true;
+      }
+    }
+  }
+ 
+  if (!encontrado) {
+    cout << "No se encontraron jugadores con esos criterios." << endl;
+  }
+}
+
+cout<<"Ingresa el identificador del jugador que quieres ofertar:";
+int Id;
+cin >> Id;
+
+Jugador *JugadorObjeto = nullptr;
+for (int i = 0; i < totaljugadores; i++){
+  if (todosLosJugadores[i]->getId()==id){
+    JugadorObjeto = todosLosJugadores[i];
+    break;
+  }
+}
+
+if(jugadorObjetivo == nullptr){
+  cout<<"No existe in jugador con ese identificador."<<endl;
+  return;
+}
+if (jugadorObjetivo->getClubActual() == &clubes[indxClubUsuario]) {
+    cout << "No puedes ofertar por un jugador de tu propio club." << endl;
+    return;
+  }
+ 
+  int clubVendedorIdx = indiceDelClub(jugadorObjetivo->getClubActual());
+ 
+  cout << "Monto de la oferta (millones): ";
+  double monto;
+  cin >> monto;
+  if (monto <= 0) {
+    cout << "Monto inválido." << endl;
+    return;
+  }
+ 
+  Oferta o;
+  o.Id = cantidadOfertas + 1;
+  o.jugador = jugadorObjetivo;
+  o.Comprador = &clubes[indxClubUsuario];
+  o.Vendedor = &clubes[clubVendedorIdx];
+  o.Monto = monto;
+  o.Estado = "pendiente";
+  agregarOferta(o);
+ 
+  cout << "Oferta registrada por " << monto
+       << " millones. Se resolverá al avanzar el día." << endl;
+}
+ 
+void SimuladorMercado::revisarOfertasRecibidas() {
+  int idx = -1;
+  for (int i = 0; i < cantidadOfertas; i++) {
+    if (ofertas[i].Estado == "pendiente" &&
+        ofertas[i].Vendedor == &clubes[indxClubUsuario]) {
+      idx = i;
+      break;
+    }
+  }
+ 
+  if (idx == -1) {
+    cout << "No tienes ofertas pendientes por revisar." << endl;
+    return;
+  }
+ 
+  Oferta &o = ofertas[idx];
+  cout << "\n" << o.Comprador->getNombre() << " ofrece " << o.Monto
+       << " millones por " << o.jugador->getNombre()
+       << " (valor actual: " << o.jugador->getValorMercado() << " millones)"
+       << endl;
+  cout << "1. Aceptar   2. Rechazar: ";
+  int opcion;
+  cin >> opcion;
+ 
+  if (opcion == 1) {
+    if (clubSeQuedaSinPosicion(clubes[indxClubUsuario], o.jugador)) {
+      cout << "No puedes aceptar: tu club se quedaría sin jugadores en esa "
+              "posición. La oferta queda rechazada."
+           << endl;
+      o.Estado = "rechazada";
+      ofertasRechazadas++;
+      return;
+    }
+    if (o.Comprador->getPresupuesto() < o.Monto) {
+      cout << o.Comprador->getNombre()
+           << " ya no tiene presupuesto suficiente. La oferta queda "
+              "rechazada."
+           << endl;
+      o.Estado = "rechazada";
+      ofertasRechazadas++;
+      return;
+    }
+    ejecutarTransferencia(o.jugador, clubes[indxClubUsuario], *o.Comprador,
+                           o.Monto);
+    o.Estado = "aceptada";
+    ofertasAceptadas++;
+    cout << "¡Transferencia realizada!" << endl;
+  } else {
+    o.Estado = "rechazada";
+    ofertasRechazadas++;
+    cout << "Oferta rechazada." << endl;
+  }
+}
+ 
+void SimuladorMercado::verHistorial() {
+  if (cantidadHistorial == 0) {
+    cout << "\nTodavía no se ha completado ninguna transferencia." << endl;
+    return;
+  }
+  cout << "\n===== Historial de transferencias =====" << endl;
+  for (int i = 0; i < cantidadHistorial; i++) {
+    Transferencia &t = historialTransferencias[i];
+    cout << "Día " << t.Dia << " | " << t.jugador->getNombre() << " | "
+         << t.Origen->getNombre() << " -> " << t.Destino->getNombre()
+         << " | " << t.montoPagado << " millones" << endl;
+  }
+}
+ 
+void SimuladorMercado::avanzarDia() {
+  if (diaActual >= totalDias) {
+    cout << "Ya se alcanzó el total de días de la simulación." << endl;
+    return;
+  }
+ 
+  diaActual++;
+ 
+  //  Resolver la oferta de compra que el usuario haya enviado (si hay).
+  for (int i = 0; i < cantidadOfertas; i++) {
+    if (ofertas[i].Estado != "pendiente" ||
+        ofertas[i].Comprador != &clubes[indxClubUsuario]) {
+      continue;
+    }
+    Oferta &o = ofertas[i];
+    double umbral = o.jugador->getValorMercado() * 1.10;
+    bool alcanzaUmbral = o.Monto >= umbral;
+    bool hayPresupuesto = o.Comprador->getPresupuesto() >= o.Monto;
+    bool dejaSinPosicion = clubSeQuedaSinPosicion(*o.Vendedor, o.jugador);
+ 
+    cout << "\nResolviendo tu oferta por " << o.jugador->getNombre() << "..."
+         << endl;
+    if (alcanzaUmbral && hayPresupuesto && !dejaSinPosicion) {
+      ejecutarTransferencia(o.jugador, *o.Vendedor, *o.Comprador, o.Monto);
+      o.Estado = "aceptada";
+      ofertasAceptadas++;
+      cout << "¡Oferta aceptada! Fichaste a " << o.jugador->getNombre()
+           << "." << endl;
+    } else {
+      o.Estado = "rechazada";
+      ofertasRechazadas++;
+      cout << "Oferta rechazada";
+      if (!alcanzaUmbral) {
+        cout << " (el monto no llegó al 110% del valor de mercado)";
+      } else if (!hayPresupuesto) {
+        cout << " (presupuesto insuficiente)";
+      } else if (dejaSinPosicion) {
+        cout << " (el club vendedor se quedaría sin esa posición)";
+      }
+      cout << "." << endl;
+    }
+    break; 
+  }
+ 
+  //  Posiblemente generar una oferta rival por un jugador del usuario.
+  bool yaTieneOfertaRecibida = false;
+  for (int i = 0; i < cantidadOfertas; i++) {
+    if (ofertas[i].Estado == "pendiente" &&
+        ofertas[i].Vendedor == &clubes[indxClubUsuario]) {
+      yaTieneOfertaRecibida = true;
+      break;
+    }
+  }
+  if (!yaTieneOfertaRecibida && rand() % 100 < 40) {
+    vector<Jugador *> &misJugadores = clubes[indxClubUsuario].getJugadores();
+    if (!misJugadores.empty()) {
+      int idxJugador = rand() % (int)misJugadores.size();
+      Jugador *elegido = misJugadores[idxJugador];
+ 
+      int idxComprador;
+      do {
+        idxComprador = rand() % 6;
+      } while (idxComprador == indxClubUsuario);
+ 
+      double valor = elegido->getValorMercado();
+      int porcentaje = 90 + rand() % 41; // 90 a 130
+      int monto = (int)(valor * porcentaje / 100.0);
+      if (monto < 1) {
+        monto = 1;
+      }
+ 
+      Oferta o;
+      o.Id = cantidadOfertas + 1;
+      o.jugador = elegido;
+      o.Comprador = &clubes[idxComprador];
+      o.Vendedor = &clubes[indxClubUsuario];
+      o.Monto = monto;
+      o.Estado = "pendiente";
+      agregarOferta(o);
+ 
+      cout << "\n" << clubes[idxComprador].getNombre()
+           << " envio una oferta por " << elegido->getNombre()
+           << ". Revisala en \"Revisar Ofertas Recibidas\"." << endl;
+    }
+  }
+ 
+  // 3valores de mercado (de 5 a 15)
+  for (int i = 0; i < totalJugadores; i++) {
+    Jugador *j = todosLosJugadores[i];
+    double valorActual = j->getValorMercado();
+    int variacion = -5 + rand() % 11; // -5..5
+    double nuevoValor = valorActual * (1.0 + variacion / 100.0);
+    if (nuevoValor < 5) {
+      nuevoValor = 5;
+    }
+    j->setValorMercado(nuevoValor);
+  }
+ 
+  cout << "\nDia " << diaActual << " de " << totalDias << " completado."
+       << endl;
+}
+ 
+//REPORTE
+void SimuladorMercado::generarReporteFinal() {
+  Club &miClub = clubes[indxClubUsuario];
+ 
+  cout << "\n===== Reporte final =====" << endl;
+  cout << "Club administrado: " << miClub.getNombre() << endl;
+ 
+  cout << "\nPlantilla inicial:" << endl;
+  for (size_t k = 0; k < plantillaInicialUsuario.size(); k++) {
+    cout << "  - " << plantillaInicialUsuario[k]->mostrarDescripcion()
+         << endl;
+  }
+ 
+  cout << "\nPlantilla final:" << endl;
+  vector<Jugador *> &jugadoresFinal = miClub.getJugadores();
+  for (size_t k = 0; k < jugadoresFinal.size(); k++) {
+    cout << "  - " << jugadoresFinal[k]->mostrarDescripcion() << endl;
+  }
+ 
+  cout << "\nPresupuesto inicial: " << presupuestoInicialUsuario
+       << " millones" << endl;
+  cout << "Presupuesto final: " << miClub.getPresupuesto() << " millones"
+       << endl;
+  cout << "Total gastado en compras: " << totalGastado << " millones"
+       << endl;
+  cout << "Total recibido por ventas: " << totalRecibido << " millones"
+       << endl;
+  cout << "Jugadores comprados: " << jugadoresComprados << endl;
+  cout << "Jugadores vendidos: " << jugadoresVendidos << endl;
+  cout << "Ofertas aceptadas: " << ofertasAceptadas << endl;
+  cout << "Ofertas rechazadas: " << ofertasRechazadas << endl;
+ 
+  verHistorial();
+}
+ 
