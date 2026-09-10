@@ -39,6 +39,7 @@ public:
   Club *Origen;
   Club *Destino;
 };
+
 struct Oferta {
 public:
   int Id;

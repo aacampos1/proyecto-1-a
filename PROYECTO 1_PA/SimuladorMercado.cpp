@@ -5,7 +5,6 @@
 #include "Portero.h"
 #include <cstdlib>
 #include <iostream>
-#include <random>
 #include <string>
 using namespace std;
 
@@ -15,14 +14,47 @@ SimuladorMercado::SimuladorMercado() {
   ofertas = nullptr;
   historialTransferencias = nullptr;
   totalJugadores = 0;
-  cantiadOfertas = 0;
+  cantidadOfertas = 0;
   capacidadOfertas = 0;
   cantidadHistorial = 0;
   capacidadHistorial = 0;
   diaActual = 0;
   totalDias = 0;
+  indxClubUsuario = -1;
 }
-SimuladorMercado::~SimuladorMercado() {}
+
+SimuladorMercado::~SimuladorMercado() {
+  for (int i = 0; i < 30; i++) {
+    delete todosLosJugadores[i];
+  }
+  delete[] todosLosJugadores;
+  delete[] clubes;
+  delete[] ofertas;
+  delete[] historialTransferencias;
+}
+
+// Getters y Setters
+int SimuladorMercado::getTotalJugadores() { return totalJugadores; }
+int SimuladorMercado::getCantidadOfertas() { return cantidadOfertas; }
+int SimuladorMercado::getCantidadHistorial() { return cantidadHistorial; }
+int SimuladorMercado::getDiaActual() { return diaActual; }
+int SimuladorMercado::getTotalDias() { return totalDias; }
+
+void SimuladorMercado::setTotalJugadores(int totalJugadores) {
+  this->totalJugadores = totalJugadores;
+}
+void SimuladorMercado::setCantidadOfertas(int cantidadOfertas) {
+  this->cantidadOfertas = cantidadOfertas;
+}
+void SimuladorMercado::setCantidadHistorial(int cantidadHistorial) {
+  this->cantidadHistorial = cantidadHistorial;
+}
+void SimuladorMercado::setDiaActual(int diaActual) {
+  this->diaActual = diaActual;
+}
+void SimuladorMercado::setTotalDias(int totalDias) {
+  this->totalDias = totalDias;
+}
 
 void SimuladorMercado::crearClubes() {
   clubes = new Club[6];
@@ -30,44 +62,44 @@ void SimuladorMercado::crearClubes() {
   int idGlobal = 1;
   int i = 0;
 
-  // Club del Real Madrid
-  clubes[0] = Club(1, "Real Madrid", 0.0);
-  Jugador *j1 = new Portero(idGlobal++, "Thibaut Courtois", 0.0, &clubes[0]);
-  clubes[0].agregarJugador(j1);
-  todosLosJugadores[i++] = j1;
-  Jugador *j2 = new Defensa(idGlobal++, "Éder Militão", 0.0, &clubes[0]);
-  clubes[0].agregarJugador(j2);
-  todosLosJugadores[i++] = j2;
-  Jugador *j3 =
-      new Mediocampista(idGlobal++, "Jude Bellingham", 0.0, &clubes[0]);
-  clubes[0].agregarJugador(j3);
-  todosLosJugadores[i++] = j3;
-  Jugador *j4 = new Delantero(idGlobal++, "Kylian Mbappé", 0.0, &clubes[0]);
-  clubes[0].agregarJugador(j4);
-  todosLosJugadores[i++] = j4;
-  Jugador *j5 = new Delantero(idGlobal++, "Rodrygo", 0.0, &clubes[0]);
-  clubes[0].agregarJugador(j5);
-  todosLosJugadores[i++] = j5;
-
   // Club del Barcelona
-  clubes[1] = Club(2, "FC Barcelona", 0.0);
+  clubes[0] = Club(1, "FC Barcelona", 0.0);
   Jugador *j6 =
       new Portero(idGlobal++, "Marc-André ter Stegen", 0.0, &clubes[1]);
-  clubes[1].agregarJugador(j6);
+  clubes[0].agregarJugador(j6);
   todosLosJugadores[i++] = j6;
   Jugador *j7 = new Defensa(idGlobal++, "Ronald Araújo", 0.0, &clubes[1]);
-  clubes[1].agregarJugador(j7);
+  clubes[0].agregarJugador(j7);
   todosLosJugadores[i++] = j7;
   Jugador *j8 = new Mediocampista(idGlobal++, "Pedri", 0.0, &clubes[1]);
-  clubes[1].agregarJugador(j8);
+  clubes[0].agregarJugador(j8);
   todosLosJugadores[i++] = j8;
   Jugador *j9 =
       new Delantero(idGlobal++, "Robert Lewandowski", 0.0, &clubes[1]);
-  clubes[1].agregarJugador(j9);
+  clubes[0].agregarJugador(j9);
   todosLosJugadores[i++] = j9;
   Jugador *j10 = new Delantero(idGlobal++, "Lamine Yamal", 0.0, &clubes[1]);
-  clubes[1].agregarJugador(j10);
+  clubes[0].agregarJugador(j10);
   todosLosJugadores[i++] = j10;
+
+  // Club del Real Madrid
+  clubes[1] = Club(2, "Real Madrid", 0.0);
+  Jugador *j1 = new Portero(idGlobal++, "Thibaut Courtois", 0.0, &clubes[0]);
+  clubes[1].agregarJugador(j1);
+  todosLosJugadores[i++] = j1;
+  Jugador *j2 = new Defensa(idGlobal++, "Éder Militão", 0.0, &clubes[0]);
+  clubes[1].agregarJugador(j2);
+  todosLosJugadores[i++] = j2;
+  Jugador *j3 =
+      new Mediocampista(idGlobal++, "Jude Bellingham", 0.0, &clubes[0]);
+  clubes[1].agregarJugador(j3);
+  todosLosJugadores[i++] = j3;
+  Jugador *j4 = new Delantero(idGlobal++, "Kylian Mbappé", 0.0, &clubes[0]);
+  clubes[1].agregarJugador(j4);
+  todosLosJugadores[i++] = j4;
+  Jugador *j5 = new Delantero(idGlobal++, "Rodrygo", 0.0, &clubes[0]);
+  clubes[1].agregarJugador(j5);
+  todosLosJugadores[i++] = j5;
 
   // Club del Manchester City
   clubes[2] = Club(3, "Manchester City", 0.0);
@@ -87,44 +119,44 @@ void SimuladorMercado::crearClubes() {
   clubes[2].agregarJugador(j15);
   todosLosJugadores[i++] = j15;
 
-  // Club de Liverpool
-  clubes[3] = Club(4, "Liverpool", 0.0);
-  Jugador *j16 = new Portero(idGlobal++, "Alisson Becker", 0.0, &clubes[3]);
-  clubes[3].agregarJugador(j16);
-  todosLosJugadores[i++] = j16;
-  Jugador *j17 = new Defensa(idGlobal++, "Virgil van Dijk", 0.0, &clubes[3]);
-  clubes[3].agregarJugador(j17);
-  todosLosJugadores[i++] = j17;
-  Jugador *j18 =
-      new Mediocampista(idGlobal++, "Alexis Mac Allister", 0.0, &clubes[3]);
-  clubes[3].agregarJugador(j18);
-  todosLosJugadores[i++] = j18;
-  Jugador *j19 = new Delantero(idGlobal++, "Mohamed Salah", 0.0, &clubes[3]);
-  clubes[3].agregarJugador(j19);
-  todosLosJugadores[i++] = j19;
-  Jugador *j20 = new Delantero(idGlobal++, "Luis Díaz", 0.0, &clubes[3]);
-  clubes[3].agregarJugador(j20);
-  todosLosJugadores[i++] = j20;
-
   // Club de Bayern Múnich
-  clubes[4] = Club(5, "Bayern Múnich", 0.0);
+  clubes[3] = Club(4, "Bayern Múnich", 0.0);
   Jugador *j21 = new Portero(idGlobal++, "Manuel Neuer", 0.0, &clubes[4]);
-  clubes[4].agregarJugador(j21);
+  clubes[3].agregarJugador(j21);
   todosLosJugadores[i++] = j21;
   Jugador *j22 = new Defensa(idGlobal++, "Dayot Upamecano", 0.0, &clubes[4]);
-  clubes[4].agregarJugador(j22);
+  clubes[3].agregarJugador(j22);
   todosLosJugadores[i++] = j22;
   Jugador *j23 =
       new Mediocampista(idGlobal++, "Joshua Kimmich", 0.0, &clubes[4]);
-  clubes[4].agregarJugador(j23);
+  clubes[3].agregarJugador(j23);
   todosLosJugadores[i++] = j23;
   Jugador *j24 = new Delantero(idGlobal++, "Harry Kane", 0.0, &clubes[4]);
-  clubes[4].agregarJugador(j24);
+  clubes[3].agregarJugador(j24);
   todosLosJugadores[i++] = j24;
   Jugador *j25 =
       new Mediocampista(idGlobal++, "Jamal Musiala", 0.0, &clubes[4]);
-  clubes[4].agregarJugador(j25);
+  clubes[3].agregarJugador(j25);
   todosLosJugadores[i++] = j25;
+
+  // Club de Liverpool
+  clubes[4] = Club(5, "Liverpool", 0.0);
+  Jugador *j16 = new Portero(idGlobal++, "Alisson Becker", 0.0, &clubes[3]);
+  clubes[4].agregarJugador(j16);
+  todosLosJugadores[i++] = j16;
+  Jugador *j17 = new Defensa(idGlobal++, "Virgil van Dijk", 0.0, &clubes[3]);
+  clubes[4].agregarJugador(j17);
+  todosLosJugadores[i++] = j17;
+  Jugador *j18 =
+      new Mediocampista(idGlobal++, "Alexis Mac Allister", 0.0, &clubes[3]);
+  clubes[4].agregarJugador(j18);
+  todosLosJugadores[i++] = j18;
+  Jugador *j19 = new Delantero(idGlobal++, "Mohamed Salah", 0.0, &clubes[3]);
+  clubes[4].agregarJugador(j19);
+  todosLosJugadores[i++] = j19;
+  Jugador *j20 = new Delantero(idGlobal++, "Luis Díaz", 0.0, &clubes[3]);
+  clubes[4].agregarJugador(j20);
+  todosLosJugadores[i++] = j20;
 
   // Club de Paris Saint-Germain
   clubes[5] = Club(6, "Paris Saint-Germain", 0.0);
@@ -148,7 +180,7 @@ void SimuladorMercado::crearClubes() {
 
 void SimuladorMercado::asignarPresupuestos() {
   for (int i = 0; i < 6; i++) {
-    int presupuesto = 100 + rand() % 101; // 100 a 200 inclusive
+    int presupuesto = 100 + rand() % 101; // 100 a 200
     clubes[i].setPresupuesto(presupuesto);
   }
 }
@@ -168,4 +200,43 @@ void SimuladorMercado::asignarValoresMercado() {
     }
     j->setValorMercado(valor);
   }
+}
+void SimuladorMercado::agregarOferta(Oferta o) {
+  if (cantidadOfertas == capacidadOfertas) {
+    int nuevaCapacidad;
+    if (capacidadOfertas == 0) {
+      nuevaCapacidad = 4;
+    } else {
+      nuevaCapacidad = capacidadOfertas * 2;
+    }
+    Oferta *temp = new Oferta[nuevaCapacidad];
+    for (int i = 0; i < cantidadOfertas; i++) {
+      temp[i] = ofertas[i];
+    }
+    delete[] ofertas;
+    ofertas = temp;
+    capacidadOfertas = nuevaCapacidad;
+  }
+  ofertas[cantidadOfertas] = o;
+  cantidadOfertas++;
+}
+
+void SimuladorMercado::agregarTransferencia(Transferencia t) {
+  if (cantidadHistorial == capacidadHistorial) {
+    int nuevaCapacidad;
+    if (capacidadHistorial == 0) {
+      nuevaCapacidad = 4;
+    } else {
+      nuevaCapacidad = capacidadHistorial * 2;
+    }
+    Transferencia *temp = new Transferencia[nuevaCapacidad];
+    for (int i = 0; i < cantidadHistorial; i++) {
+      temp[i] = historialTransferencias[i];
+    }
+    delete[] historialTransferencias;
+    historialTransferencias = temp;
+    capacidadHistorial = nuevaCapacidad;
+  }
+  historialTransferencias[cantidadHistorial] = t;
+  cantidadHistorial++;
 }
