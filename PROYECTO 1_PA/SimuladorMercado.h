@@ -20,6 +20,24 @@ private:
   int totalDias;
   int indxClubUsuario;
 
+  //estadoinicial del club usuario
+  double presupuestoInicialUsuario;
+  vector<Jugador *> plantillaInicialUsuario;
+
+  //Acumuladores
+  double totalGastado;
+  double totalRecibido;
+  int jugadoresComprados;
+  int jugadoresVendidos;
+  int ofertasAceptadas;
+  int ofertasRechazadas;
+ 
+  //Helpers Internos
+  int indiceDelClub(Club *c) const;
+  bool clubSeQuedaSinPosicion(Club &c, Jugador *jugadorQueSaldria) const;
+  void ejecutarTransferencia(Jugador *j, Club &origen, Club &destino,
+   double monto);
+
 public:
   SimuladorMercado();
   ~SimuladorMercado();
@@ -49,5 +67,14 @@ public:
   void avanzarDia();
   void agregarOferta(Oferta o);
   void agregarTransferencia(Transferencia t);
+  void EstadoInicial();
+
+  //opciones menu
+  void verMiClub();
+  void explorarJugadores();
+  void revisarOfertasRecibidas();
+  void verHistorial();
+  void generarReporteFinal();
+
 };
 #endif
