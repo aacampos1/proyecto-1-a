@@ -3,6 +3,7 @@
 #include "Jugador.h"
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 class SimuladorMercado {
@@ -20,46 +21,47 @@ private:
   int totalDias;
   int indxClubUsuario;
 
-  //estadoinicial del club usuario
+  // estado inicial del club usuario
   double presupuestoInicialUsuario;
   vector<Jugador *> plantillaInicialUsuario;
 
-  //Acumuladores
+  // Acumuladores
   double totalGastado;
   double totalRecibido;
   int jugadoresComprados;
   int jugadoresVendidos;
   int ofertasAceptadas;
   int ofertasRechazadas;
- 
-  //Helpers Internos
+
+  // Helpers internos
   int indiceDelClub(Club *c) const;
   bool clubSeQuedaSinPosicion(Club &c, Jugador *jugadorQueSaldria) const;
   void ejecutarTransferencia(Jugador *j, Club &origen, Club &destino,
-   double monto);
+                              double monto);
 
 public:
   SimuladorMercado();
   ~SimuladorMercado();
 
   // getters
-  int getTotalJugadores();
-  int getCantidadOfertas();
-  int getCantidadHistorial();
-  int getDiaActual();
-  int getTotalDias();
-  int getIndxClubUsuario() const { return indxClubUsuario; };
+  int getTotalJugadores() const;
+  int getCantidadOfertas() const;
+  int getCantidadHistorial() const;
+  int getDiaActual() const;
+  int getTotalDias() const;
+  int getIndxClubUsuario() const { return indxClubUsuario; }
   Club *getClubes() const { return clubes; }
 
   // setters
-int getTotalJugadores() const;
-    int getCantidadOfertas() const;
-    int getCantidadHistorial() const;
-    int getDiaActual() const;
-    int getTotalDias() const;
+  void setTotalJugadores(int totalJugadores);
+  void setCantidadOfertas(int cantidadOfertas);
+  void setCantidadHistorial(int cantidadHistorial);
+  void setDiaActual(int diaActual);
+  void setTotalDias(int totalDias);
+  void setIndxClubUsuario(int indx) { indxClubUsuario = indx; }
 
-    void agregarOferta(const Oferta &o);
-    void agregarTransferencia(const Transferencia &t);
+  void agregarOferta(const Oferta &o);
+  void agregarTransferencia(const Transferencia &t);
 
   // metodos
   void crearClubes();
@@ -67,16 +69,13 @@ int getTotalJugadores() const;
   void asignarValoresMercado();
   void realizarOferta();
   void avanzarDia();
-  void agregarOferta(Oferta o);
-  void agregarTransferencia(Transferencia t);
   void EstadoInicial();
 
-  //opciones menu
+  // opciones menu
   void verMiClub();
   void explorarJugadores();
   void revisarOfertasRecibidas();
   void verHistorial();
   void generarReporteFinal();
-
 };
 #endif

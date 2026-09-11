@@ -9,7 +9,7 @@
 #include <iostream>
 using namespace std;
 
-// Función Para detectar letras
+//detectar letras
 int pedirNumeroEntero(const string &mensaje, int minimo, int maximo) {
   int numero;
   while (true) {
@@ -32,7 +32,7 @@ int pedirNumeroEntero(const string &mensaje, int minimo, int maximo) {
 }
 
 int main() {
-  // Inicialización del Simulador
+ 
   srand(time(0));
   SimuladorMercado simulador;
   simulador.crearClubes();
@@ -56,6 +56,11 @@ int main() {
   int dias = pedirNumeroEntero(
       "¿Cuántos días quieres simular? (entre 5 y 15): ", 5, 15);
   simulador.setTotalDias(dias);
+
+
+
+  simulador.EstadoInicial();
+
   cout << "\n" << endl;
   cout << "--Antes de empezar..." << endl;
   cout << "\n=== Configuración inicial ===" << endl;
@@ -63,7 +68,8 @@ int main() {
        << simulador.getClubes()[simulador.getIndxClubUsuario()].getNombre()
        << endl;
   cout << "Presupuesto inicial: "
-       << simulador.getClubes()[simulador.getIndxClubUsuario()].getPresupuesto()
+       << simulador.getClubes()[simulador.getIndxClubUsuario()]
+              .getPresupuesto()
        << " M€" << endl;
   cout << "Días de simulación: " << simulador.getTotalDias() << endl;
   cout << "\nResumen de los 6 clubes:" << endl;
@@ -74,7 +80,7 @@ int main() {
   }
   cout << "\n" << endl;
 
-  // Menú Principal
+  // Menu principal
   do {
     cout << "=====Simulador de Transferencia de Fútbol=====" << endl;
     cout << "1. Ver mi Club" << endl;
@@ -89,34 +95,46 @@ int main() {
     switch (OpcionMenu) {
     case 1:
       cout << "\n-----Ver mi Club-----" << endl;
-      simulador.verMiClub(); // ¡Llamada agregada!
+      simulador.verMiClub();
       break;
     case 2:
       cout << "\n-----Explorar Jugadores-----" << endl;
-      simulador.explorarJugadores(); // ¡Llamada agregada!
+      simulador.explorarJugadores();
       break;
     case 3:
       cout << "\n-----Realizar una Oferta-----" << endl;
-      simulador.realizarOferta(); // ¡Llamada agregada!
+      simulador.realizarOferta();
       break;
     case 4:
       cout << "\n-----Revisar Ofertas Recibidas-----" << endl;
-      simulador.revisarOfertasRecibidas(); // ¡Llamada agregada!
+      simulador.revisarOfertasRecibidas();
       break;
     case 5:
       cout << "\n-----Ver Historial-----" << endl;
-      simulador.verHistorial(); // ¡Llamada agregada!
+      simulador.verHistorial();
       break;
     case 6:
       cout << "\n-----Avanzar de día-----" << endl;
-      simulador.avanzarDia(); // ¡Llamada agregada!
+      simulador.avanzarDia();
+    
+      if (simulador.getDiaActual() >= simulador.getTotalDias()) {
+        cout << "\nSe completaron los " << simulador.getTotalDias()
+             << " días de la simulación." << endl;
+        cout << "Generando Reporte..." << endl;
+        simulador.generarReporteFinal();
+        OpcionMenu = 7;
+      }
       break;
     case 7:
       cout << "\nSaliendo..." << endl;
       cout << "Generando Reporte..." << endl;
-      simulador.generarReporteFinal(); // ¡Llamada agregada!
+      simulador.generarReporteFinal();
       break;
     default:
       cout << "\nOpción inválida" << endl;
       break;
     }
+  } while (OpcionMenu != 7);
+
+  return 0;
+}
