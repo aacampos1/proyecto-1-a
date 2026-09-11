@@ -52,12 +52,14 @@ public:
   Club *getClubes() const { return clubes; }
 
   // setters
-  void setTotalJugadores(int totalJugadores);
-  void setCantidadOfertas(int cantidadOfertas);
-  void setCantidadHistorial(int cantidadHistorial);
-  void setDiaActual(int diaActual);
-  void setTotalDias(int totalDias);
-  void setIndxClubUsuario(int indice) { indxClubUsuario = indice; };
+int getTotalJugadores() const;
+    int getCantidadOfertas() const;
+    int getCantidadHistorial() const;
+    int getDiaActual() const;
+    int getTotalDias() const;
+
+    void agregarOferta(const Oferta &o);
+    void agregarTransferencia(const Transferencia &t);
 
   // metodos
   void crearClubes();

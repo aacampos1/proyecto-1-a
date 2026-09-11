@@ -553,7 +553,7 @@ void SimuladorMercado::avanzarDia() {
         }
     }
 
-    // Fluctuación de valores de mercado
+    // Fluctuacion de valores de mercado
     for (int i = 0; i < totalJugadores; i++) {
         Jugador *j = todosLosJugadores[i];
         double valorActual = j->getValorMercado();
