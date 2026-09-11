@@ -88,40 +88,35 @@ int main() {
 
     switch (OpcionMenu) {
     case 1:
-      cout << "\n" << endl;
-      cout << "-----Ver mi Club-----" << endl;
+      cout << "\n-----Ver mi Club-----" << endl;
+      simulador.verMiClub(); // ¡Llamada agregada!
       break;
     case 2:
-      cout << "\n" << endl;
-      cout << "-----Explorar Jugadores-----" << endl;
+      cout << "\n-----Explorar Jugadores-----" << endl;
+      simulador.explorarJugadores(); // ¡Llamada agregada!
       break;
     case 3:
-      cout << "\n" << endl;
-      cout << "-----Realizar una Oferta-----" << endl;
+      cout << "\n-----Realizar una Oferta-----" << endl;
+      simulador.realizarOferta(); // ¡Llamada agregada!
       break;
     case 4:
-      cout << "\n" << endl;
-      cout << "-----Revisar Ofertas Recibidas-----" << endl;
+      cout << "\n-----Revisar Ofertas Recibidas-----" << endl;
+      simulador.revisarOfertasRecibidas(); // ¡Llamada agregada!
       break;
     case 5:
-      cout << "\n" << endl;
-      cout << "-----Ver Historial-----" << endl;
+      cout << "\n-----Ver Historial-----" << endl;
+      simulador.verHistorial(); // ¡Llamada agregada!
       break;
     case 6:
-      cout << "\n" << endl;
-      cout << "-----Avanzar de día-----" << endl;
+      cout << "\n-----Avanzar de día-----" << endl;
+      simulador.avanzarDia(); // ¡Llamada agregada!
       break;
     case 7:
-      cout << "\n" << endl;
-      cout << "Saliendo..." << endl;
+      cout << "\nSaliendo..." << endl;
       cout << "Generando Reporte..." << endl;
-      cout << "" << endl;
+      simulador.generarReporteFinal(); // ¡Llamada agregada!
       break;
     default:
-      cout << "\n" << endl;
-      cout << "Opción inválida" << endl;
+      cout << "\nOpción inválida" << endl;
       break;
     }
-  } while (OpcionMenu != 7);
-  return 0;
-}
