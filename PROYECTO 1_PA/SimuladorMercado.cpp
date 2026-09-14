@@ -260,7 +260,7 @@ bool SimuladorMercado::clubSeQuedaSinPosicion(Club &c, Jugador *jugadorQueSaldri
 void SimuladorMercado::ejecutarTransferencia(Jugador *j, Club &origen, Club &destino, double monto) {
     vector<Jugador*> &jugadoresOrigen = origen.getJugadores();
     int idx = -1;
-    for (size_t k = 0; k < jugadoresOrigen.size(); k++) {
+    for (size_t k = 0; k < jugadoresOrigen.size(); k++) {//recorre lista de club de origen
         if (jugadoresOrigen[k] == j) {
             idx = (int)k;
             break;
@@ -282,6 +282,7 @@ void SimuladorMercado::ejecutarTransferencia(Jugador *j, Club &origen, Club &des
     t.Destino = &destino;
     agregarTransferencia(t);
 
+    //intercambio de trasferencia
     if (indiceDelClub(&destino) == indxClubUsuario) {
         totalGastado += monto;
         jugadoresComprados++;
@@ -294,12 +295,12 @@ void SimuladorMercado::ejecutarTransferencia(Jugador *j, Club &origen, Club &des
 
 // Menu
 void SimuladorMercado::verMiClub() {
-    Club &miClub = clubes[indxClubUsuario];
+    Club &miClub = clubes[indxClubUsuario];//accedemos a clubes
     cout << "\n Club: " << miClub.getNombre() << endl;
     cout << " Presupuesto: " << miClub.getPresupuesto() << " millones" << endl;
     cout << " Plantilla:" << endl;
 
-    vector<Jugador *> &jugadores = miClub.getJugadores();
+    vector<Jugador *> &jugadores = miClub.getJugadores();//adaptamos seguns su tamano
     for (size_t k = 0; k < jugadores.size(); k++) {
         cout << "---> " << jugadores[k]->mostrarDescripcion() << endl;
     }
